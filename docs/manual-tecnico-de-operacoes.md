@@ -1,0 +1,52 @@
+# MANUAL TÉCNICO DE OPERAÇÕES
+
+---
+
+**MANUAL TÉCNICO DE OPERAÇÕES**
+
+**O Cérebro Digital da UDCL**
+
+**Classificação:** OOC (Out Of Character) — Documento Técnico
+
+---
+
+> *Este Manual explica O QUE É a União Democrática dos Ciclos Livres e COMO operar nela. Leia as seções abaixo para entender o universo. Ao final, entre no Portal para acessar a lore viva.*
+> 
+
+A **UDCL** é um Estado Fraterno de Soberania Lúdica fundado por **João Victor** e **Pedro Gabriel** em 05 de janeiro de 2026 — uma amizade transformada em instituição jurídica.
+
+---
+
+## ENTENDA A UDCL
+
+[O QUE É A UDCL](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/O%20QUE%20%C3%89%20A%20UDCL%2030465fdd5fe5810f88a1e86564678bba.md)
+
+[ORDENAMENTO JURÍDICO](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/ORDENAMENTO%20JUR%C3%8DDICO%2030465fdd5fe581c097b0c6f0060ec732.md)
+
+[O ADVOGADO-GERAL DA RESENHA (AGR)](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/O%20ADVOGADO-GERAL%20DA%20RESENHA%20(AGR)%2030465fdd5fe58146997fc5ebdda7dabc.md)
+
+[PRINCÍPIOS FUNDAMENTAIS](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/PRINC%C3%8DPIOS%20FUNDAMENTAIS%2030465fdd5fe581fe9448eeda6df50a36.md)
+
+[ESTRUTURA INSTITUCIONAL](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/ESTRUTURA%20INSTITUCIONAL%2030465fdd5fe581f09712d8d8b485aa3b.md)
+
+[OPERAÇÕES](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/OPERA%C3%87%C3%95ES%2030465fdd5fe5817b93c2f07f874a4cba.md)
+
+[HERÁLDICA E IDENTIDADE VISUAL](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/HER%C3%81LDICA%20E%20IDENTIDADE%20VISUAL%2030465fdd5fe5815bbcc3f07cf56c118a.md)
+
+[TEMPLATES DE DOCUMENTOS](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/TEMPLATES%20DE%20DOCUMENTOS%2030465fdd5fe5815c91afc150bea9dd8a.md)
+
+---
+
+> **Você leu o Manual. Agora entre na União.**
+> 
+
+> O Portal abaixo é a sede virtual da UDCL — a lore viva, com todas as Seções operacionais, databases, acervos e gabinetes.
+> 
+
+[UNIÃO DEMOCRÁTICA DOS CICLOS LIVRES](MANUAL%20T%C3%89CNICO%20DE%20OPERA%C3%87%C3%95ES/UNI%C3%83O%20DEMOCR%C3%81TICA%20DOS%20CICLOS%20LIVRES%202f665fdd5fe580f1b0aec11118ea72cc.md)
+
+---
+
+*Manual Técnico de Operações | O Cérebro Digital | UDCL*
+
+*"AMICITIA VINCIT OMNIA"*
