@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UDCL — Portal Oficial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1a1a2e;
+  --bg2:#16213e;
+  --card:#252540;
+  --card-hover:#2e2e50;
+  --primary:#1B3A6B;
+  --green:#2E7D32;
+  --gold:#D4AF37;
+  --gold-dim:rgba(212,175,55,.15);
+  --text:#f0f0f0;
+  --text-dim:#b0b0b0;
+  --border:#3a3a5c;
+  --radius:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  min-height:100vh;
+}
+a{color:var(--gold);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ── HEADER ── */
+header{
+  background:linear-gradient(135deg,var(--primary) 0%,#0f2847 100%);
+  text-align:center;
+  padding:3rem 1rem 2.5rem;
+  border-bottom:3px solid var(--gold);
+}
+header h1{
+  font-size:clamp(1.4rem,4vw,2.4rem);
+  font-weight:800;
+  letter-spacing:.08em;
+  color:var(--gold);
+  margin-bottom:.3rem;
+}
+header .subtitle{
+  font-size:clamp(.9rem,2.5vw,1.15rem);
+  color:var(--text-dim);
+  font-weight:600;
+}
+header .motto{
+  margin-top:.8rem;
+  font-style:italic;
+  color:var(--text);
+  font-size:.95rem;
+  letter-spacing:.12em;
+}
+
+/* ── NAV ── */
+nav{
+  background:var(--bg2);
+  display:flex;
+  justify-content:center;
+  gap:.5rem;
+  padding:.6rem 1rem;
+  flex-wrap:wrap;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+nav a{
+  color:var(--text-dim);
+  font-size:.85rem;
+  font-weight:600;
+  padding:.4rem .9rem;
+  border-radius:20px;
+  transition:all .2s;
+}
+nav a:hover{background:var(--gold-dim);color:var(--gold);text-decoration:none}
+
+/* ── SECTIONS ── */
+main{max-width:1100px;margin:0 auto;padding:1.5rem 1rem}
+section{margin-bottom:2.5rem}
+.section-title{
+  font-size:1.4rem;
+  font-weight:700;
+  color:var(--gold);
+  margin-bottom:1rem;
+  padding-bottom:.5rem;
+  border-bottom:2px solid var(--border);
+}
+
+/* ── DASHBOARD ── */
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:1rem;
+}
+.dash-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.2rem;
+}
+.dash-card h3{
+  font-size:.8rem;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+  color:var(--text-dim);
+  margin-bottom:.4rem;
+}
+.dash-card .value{
+  font-size:1.5rem;
+  font-weight:700;
+  color:var(--text);
+}
+.dash-card .value.gold{color:var(--gold)}
+.dash-card .value.green{color:var(--green)}
+.progress-wrap{
+  background:#1a1a30;
+  border-radius:6px;
+  height:14px;
+  overflow:hidden;
+  margin-top:.5rem;
+}
+.progress-bar{
+  height:100%;
+  border-radius:6px;
+  background:linear-gradient(90deg,var(--primary),var(--gold));
+  transition:width .6s ease;
+}
+
+/* ── SEARCH ── */
+.search-box{
+  display:flex;
+  gap:.5rem;
+  flex-wrap:wrap;
+  margin-bottom:1rem;
+}
+#search-input{
+  flex:1;
+  min-width:200px;
+  padding:.7rem 1rem;
+  font-size:1rem;
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  color:var(--text);
+  outline:none;
+  font-family:inherit;
+}
+#search-input:focus{border-color:var(--gold)}
+#diploma-filter{
+  padding:.7rem .8rem;
+  font-size:.9rem;
+  border:2px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--card);
+  color:var(--text);
+  font-family:inherit;
+  cursor:pointer;
+}
+#search-results .result-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1rem;
+  margin-bottom:.6rem;
+  cursor:pointer;
+  transition:border-color .2s;
+}
+#search-results .result-card:hover{border-color:var(--gold)}
+.result-header{
+  display:flex;
+  align-items:center;
+  gap:.6rem;
+  margin-bottom:.4rem;
+}
+.badge{
+  display:inline-block;
+  padding:.15rem .5rem;
+  border-radius:4px;
+  font-size:.75rem;
+  font-weight:700;
+  background:var(--primary);
+  color:var(--gold);
+}
+.result-preview{
+  font-size:.9rem;
+  color:var(--text-dim);
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+}
+.result-full{
+  display:none;
+  margin-top:.8rem;
+  padding-top:.8rem;
+  border-top:1px solid var(--border);
+  font-size:.9rem;
+  white-space:pre-wrap;
+  line-height:1.7;
+}
+.result-full.open{display:block}
+mark{background:var(--gold-dim);color:var(--gold);padding:.1em .2em;border-radius:3px}
+.ref-links{margin-top:.6rem;display:flex;flex-wrap:wrap;gap:.4rem}
+.ref-link{
+  font-size:.78rem;
+  padding:.2rem .5rem;
+  background:var(--gold-dim);
+  border-radius:4px;
+  color:var(--gold);
+  cursor:pointer;
+}
+.ref-link:hover{background:var(--gold);color:var(--bg);text-decoration:none}
+.search-meta{font-size:.85rem;color:var(--text-dim);margin-bottom:.8rem}
+
+/* ── STATS ── */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1rem;
+}
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:1.2rem;
+  text-align:center;
+}
+.stat-number{
+  font-size:2rem;
+  font-weight:800;
+  color:var(--gold);
+}
+.stat-label{
+  font-size:.82rem;
+  color:var(--text-dim);
+  margin-top:.3rem;
+}
+.stat-detail{
+  font-size:.85rem;
+  color:var(--text);
+  margin-top:.3rem;
+  font-weight:600;
+}
+
+/* ── NAVIGATOR ── */
+.diploma-item{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  margin-bottom:.5rem;
+  overflow:hidden;
+}
+.diploma-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:.9rem 1rem;
+  cursor:pointer;
+  transition:background .2s;
+}
+.diploma-header:hover{background:var(--card-hover)}
+.diploma-header h3{font-size:.95rem;font-weight:600}
+.diploma-header .meta{font-size:.8rem;color:var(--text-dim)}
+.diploma-header .toggle{
+  font-size:.8rem;
+  color:var(--gold);
+  transition:transform .3s;
+}
+.diploma-header.open .toggle{transform:rotate(180deg)}
+.diploma-body{display:none;padding:0 1rem 1rem}
+.diploma-body.open{display:block}
+.article-item{
+  border-bottom:1px solid var(--border);
+  padding:.6rem 0;
+}
+.article-item:last-child{border-bottom:none}
+.article-head{
+  display:flex;
+  align-items:center;
+  gap:.5rem;
+  cursor:pointer;
+  font-size:.88rem;
+  font-weight:600;
+  color:var(--text);
+}
+.article-head:hover{color:var(--gold)}
+.article-text{
+  display:none;
+  margin-top:.5rem;
+  font-size:.85rem;
+  color:var(--text-dim);
+  white-space:pre-wrap;
+  line-height:1.7;
+}
+.article-text.open{display:block}
+
+/* ── FOOTER ── */
+footer{
+  text-align:center;
+  padding:2rem 1rem;
+  border-top:2px solid var(--border);
+  margin-top:2rem;
+}
+footer .date{font-size:.85rem;color:var(--text-dim);margin-bottom:.8rem}
+footer blockquote{
+  font-style:italic;
+  color:var(--text-dim);
+  max-width:700px;
+  margin:0 auto;
+  font-size:.85rem;
+  line-height:1.6;
+}
+
+/* ── ERROR ── */
+.error-msg{
+  text-align:center;
+  padding:3rem 1rem;
+}
+.error-msg h2{color:var(--gold);margin-bottom:.5rem}
+.error-msg code{
+  background:var(--card);
+  padding:.2rem .5rem;
+  border-radius:4px;
+  font-size:.9rem;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  header{padding:2rem .8rem 1.5rem}
+  .dashboard-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .search-box{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>UNIÃO DEMOCRÁTICA DOS CICLOS LIVRES</h1>
+  <p class="subtitle">Estado Fraterno de Soberania Lúdica</p>
+  <p class="motto">AMICITIA VINCIT OMNIA</p>
+</header>
+
+<nav>
+  <a href="#dashboard">Dashboard</a>
+  <a href="#busca">Busca</a>
+  <a href="#estatisticas">Estatísticas</a>
+  <a href="#navegador">Diplomas</a>
+</nav>
+
+<main id="main-content">
+
+<!-- ════ DASHBOARD ════ -->
+<section id="dashboard">
+  <h2 class="section-title">Dashboard do Ciclo</h2>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <h3>Ciclo Atual</h3>
+      <div class="value gold" id="dc-ciclo">—</div>
+      <div style="font-size:.85rem;color:var(--text-dim);margin-top:.2rem" id="dc-ano">—</div>
+    </div>
+    <div class="dash-card">
+      <h3>Presidente da República</h3>
+      <div class="value" id="dc-presidente">—</div>
+    </div>
+    <div class="dash-card">
+      <h3>Presidente do Congresso</h3>
+      <div class="value" id="dc-congresso">—</div>
+    </div>
+    <div class="dash-card">
+      <h3>Dias Restantes</h3>
+      <div class="value green" id="dc-dias">—</div>
+      <div class="progress-wrap">
+        <div class="progress-bar" id="dc-progress" style="width:0%"></div>
+      </div>
+      <div style="font-size:.8rem;color:var(--text-dim);margin-top:.4rem" id="dc-transicao">—</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ BUSCA ════ -->
+<section id="busca">
+  <h2 class="section-title">Busca Cruzada nos Diplomas</h2>
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="Buscar em todos os diplomas..." autocomplete="off">
+    <select id="diploma-filter">
+      <option value="all">Todos os diplomas</option>
+      <option value="CUDCL">Constituição (CUDCL)</option>
+      <option value="CCR">Cód. Civil (CCR)</option>
+      <option value="CPA">Cód. Penal (CPA)</option>
+      <option value="CAR">Cód. Administrativo (CAR)</option>
+      <option value="CTR">Cód. Tributação (CTR)</option>
+      <option value="CLT">Cód. Lazer (CLT)</option>
+      <option value="CLTE">Cód. Lazer/Trabalho (CLTE)</option>
+      <option value="CPC">Cód. Proc. Civil (CPC)</option>
+      <option value="CPP">Cód. Proc. Penal (CPP)</option>
+      <option value="MHS">Manual Heráldica (MHS)</option>
+    </select>
+  </div>
+  <div id="search-meta" class="search-meta" style="display:none"></div>
+  <div id="search-results"></div>
+</section>
+
+<!-- ════ ESTATÍSTICAS ════ -->
+<section id="estatisticas">
+  <h2 class="section-title">Estatísticas do Ordenamento</h2>
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="stat-number">—</div><div class="stat-label">Carregando...</div></div>
+  </div>
+</section>
+
+<!-- ════ NAVEGADOR ════ -->
+<section id="navegador">
+  <h2 class="section-title">Navegador de Diplomas</h2>
+  <div id="diploma-list"></div>
+</section>
+
+</main>
+
+<footer>
+  <p class="date">Fundado em 05 de janeiro de 2026 &middot; 1º Ano da Era da Legalidade Lúdica</p>
+  <blockquote>
+    "Nós, os Fundadores da União Democrática dos Ciclos Livres, movidos pela convicção inalienável
+    de que a amizade é o bem jurídico supremo e a força motriz de toda ordem social legítima,
+    promulgamos esta Constituição para institucionalizar, proteger e perpetuar o vínculo fraterno que nos une."
+  </blockquote>
+</footer>
+
+<script>
+/* ══════════════════════════════════════════════
+   UDCL PORTAL — JavaScript
+   ══════════════════════════════════════════════ */
+
+let artigos = [];
+
+// ── Helpers ──
+function $(sel) { return document.querySelector(sel); }
+function $$(sel) { return document.querySelectorAll(sel); }
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// ── 1. DASHBOARD DO CICLO ──
+function calcCycle() {
+  const now = new Date();
+  // Cycle boundaries: each cycle starts on the 2nd, ends on the 1st of +2 months
+  // Cycle 1 starts March 2, 2026
+  const baseYear = 2026;
+  const baseMonth = 2; // March (0-indexed)
+  const baseDay = 2;
+
+  const cycleStart = new Date(baseYear, baseMonth, baseDay);
+
+  if (now < cycleStart) {
+    // Pre-Cycle
+    const daysLeft = Math.ceil((cycleStart - now) / 864e5);
+    return {
+      name: 'Pré-Ciclo 1',
+      detail: 'Fundação e Consolidação',
+      anoLudico: 1,
+      presidente: 'João Victor Martins Andrade',
+      congresso: 'Pedro Gabriel',
+      daysRemaining: daysLeft,
+      progress: 0,
+      nextTransition: cycleStart
+    };
+  }
+
+  // Calculate which cycle we're in by iterating boundaries
+  let cycleNum = 0;
+  let cStart, cEnd;
+  const d = new Date(baseYear, baseMonth, baseDay);
+
+  while (true) {
+    cStart = new Date(d);
+    d.setMonth(d.getMonth() + 2);
+    cEnd = new Date(d.getFullYear(), d.getMonth(), 1); // 1st of the month = last day of cycle
+    const cEndNext = new Date(d.getFullYear(), d.getMonth(), d.getDate()); // 2nd = start of next cycle
+    cycleNum++;
+    if (now <= cEnd || now < cEndNext) break;
+  }
+
+  const totalDays = Math.ceil((cEnd - cStart) / 864e5) + 1;
+  const elapsed = Math.ceil((now - cStart) / 864e5);
+  const remaining = Math.max(0, totalDays - elapsed);
+  const progress = Math.min(100, (elapsed / totalDays) * 100);
+
+  const anoLudico = Math.floor((cycleNum - 1) / 6) + 1;
+  const cycleInYear = ((cycleNum - 1) % 6) + 1;
+
+  // Odd global cycle = João Victor president, Even = Pedro Gabriel
+  const isOdd = cycleNum % 2 === 1;
+
+  return {
+    name: 'Ciclo ' + cycleInYear,
+    detail: anoLudico + 'º Ano Lúdico',
+    anoLudico,
+    presidente: isOdd ? 'João Victor Martins Andrade' : 'Pedro Gabriel',
+    congresso: isOdd ? 'Pedro Gabriel' : 'João Victor Martins Andrade',
+    daysRemaining: remaining,
+    progress,
+    nextTransition: cEnd
+  };
+}
+
+function renderDashboard() {
+  const c = calcCycle();
+  $('#dc-ciclo').textContent = c.name;
+  $('#dc-ano').textContent = c.detail;
+  $('#dc-presidente').textContent = c.presidente;
+  $('#dc-congresso').textContent = c.congresso;
+  $('#dc-dias').textContent = c.daysRemaining + ' dias';
+  $('#dc-progress').style.width = c.progress + '%';
+  const opts = { day: '2-digit', month: 'long', year: 'numeric' };
+  $('#dc-transicao').textContent = 'Próxima transição: ' + c.nextTransition.toLocaleDateString('pt-BR', opts);
+}
+
+// ── 2. SEARCH ──
+let searchTimeout = null;
+
+function doSearch() {
+  const query = $('#search-input').value.trim();
+  const filter = $('#diploma-filter').value;
+  const container = $('#search-results');
+  const meta = $('#search-meta');
+
+  if (query.length < 2) {
+    container.innerHTML = '';
+    meta.style.display = 'none';
+    return;
+  }
+
+  const queryLower = query.toLowerCase();
+  const results = [];
+
+  for (const art of artigos) {
+    if (filter !== 'all' && art.sigla !== filter) continue;
+    const idx = art.texto.toLowerCase().indexOf(queryLower);
+    if (idx !== -1) {
+      results.push({ ...art, firstIndex: idx });
+    }
+  }
+
+  meta.style.display = 'block';
+  meta.textContent = results.length + ' resultado' + (results.length !== 1 ? 's' : '') + ' encontrado' + (results.length !== 1 ? 's' : '');
+
+  if (results.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-dim);text-align:center;padding:1rem">Nenhum resultado encontrado.</p>';
+    return;
+  }
+
+  const shown = results.slice(0, 80);
+  const regex = new RegExp('(' + escapeRegex(query) + ')', 'gi');
+
+  container.innerHTML = shown.map((art, i) => {
+    const preview = getPreview(art.texto, art.firstIndex, query);
+    const highlighted = escapeHtml(preview).replace(
+      new RegExp('(' + escapeRegex(escapeHtml(query)) + ')', 'gi'),
+      '<mark>$1</mark>'
+    );
+    const refHtml = art.referencias.length > 0
+      ? '<div class="ref-links">' + art.referencias.map(r =>
+          '<span class="ref-link" onclick="searchRef(\'' + escapeHtml(r.replace(/'/g, "\\'")) + '\')">' + escapeHtml(r) + '</span>'
+        ).join('') + '</div>'
+      : '';
+
+    return '<div class="result-card" onclick="toggleResult(' + i + ')">' +
+      '<div class="result-header">' +
+        '<span class="badge">' + art.sigla + '</span>' +
+        '<strong>Art. ' + art.numero + '</strong>' +
+        '<span style="color:var(--text-dim);font-size:.82rem">' + escapeHtml(art.diploma) + '</span>' +
+      '</div>' +
+      '<div class="result-preview">' + highlighted + '</div>' +
+      '<div class="result-full" id="rf-' + i + '">' +
+        '<pre style="white-space:pre-wrap;font-family:inherit;margin:0">' + highlightFull(art.texto, query) + '</pre>' +
+        refHtml +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function getPreview(texto, idx, query) {
+  const start = Math.max(0, idx - 80);
+  const end = Math.min(texto.length, idx + query.length + 120);
+  let s = texto.substring(start, end);
+  if (start > 0) s = '...' + s;
+  if (end < texto.length) s = s + '...';
+  return s.replace(/\n/g, ' ');
+}
+
+function highlightFull(texto, query) {
+  const safe = escapeHtml(texto);
+  if (!query) return safe;
+  return safe.replace(
+    new RegExp('(' + escapeRegex(escapeHtml(query)) + ')', 'gi'),
+    '<mark>$1</mark>'
+  );
+}
+
+function toggleResult(i) {
+  const el = document.getElementById('rf-' + i);
+  if (el) el.classList.toggle('open');
+}
+
+function searchRef(ref) {
+  // Extract article number from reference
+  const m = ref.match(/\d+/);
+  if (m) {
+    $('#search-input').value = 'Art. ' + m[0];
+    doSearch();
+    $('#busca').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// ── 3. STATISTICS ──
+function renderStats() {
+  if (!artigos.length) return;
+
+  const byDiploma = {};
+  const refsByDiploma = {};
+  let totalRefs = 0;
+
+  for (const a of artigos) {
+    byDiploma[a.sigla] = (byDiploma[a.sigla] || 0) + 1;
+    refsByDiploma[a.sigla] = (refsByDiploma[a.sigla] || 0) + a.referencias.length;
+    totalRefs += a.referencias.length;
+  }
+
+  const diplomas = Object.keys(byDiploma);
+  const maisArtigos = diplomas.sort((a, b) => byDiploma[b] - byDiploma[a])[0];
+  const maisRefs = Object.keys(refsByDiploma).sort((a, b) => refsByDiploma[b] - refsByDiploma[a])[0];
+
+  $('#stats-grid').innerHTML =
+    statCard(diplomas.length, 'Diplomas Normativos') +
+    statCard(artigos.length.toLocaleString('pt-BR'), 'Artigos Totais') +
+    statCard(totalRefs.toLocaleString('pt-BR'), 'Referências Cruzadas') +
+    statCardDetail(byDiploma[maisArtigos], 'Mais Artigos', maisArtigos) +
+    statCardDetail(refsByDiploma[maisRefs], 'Mais Referências', maisRefs);
+}
+
+function statCard(num, label) {
+  return '<div class="stat-card"><div class="stat-number">' + num + '</div><div class="stat-label">' + label + '</div></div>';
+}
+function statCardDetail(num, label, detail) {
+  return '<div class="stat-card"><div class="stat-number">' + num + '</div><div class="stat-label">' + label + '</div><div class="stat-detail">' + detail + '</div></div>';
+}
+
+// ── 4. DIPLOMA NAVIGATOR ──
+const DIPLOMA_ORDER = ['CUDCL','CCR','CPA','CAR','CTR','CLT','CLTE','CPC','CPP','MHS'];
+
+function renderNavigator() {
+  if (!artigos.length) return;
+
+  const byDiploma = {};
+  for (const a of artigos) {
+    if (!byDiploma[a.sigla]) byDiploma[a.sigla] = { nome: a.diploma, artigos: [] };
+    byDiploma[a.sigla].artigos.push(a);
+  }
+
+  const container = $('#diploma-list');
+  container.innerHTML = DIPLOMA_ORDER.map(sigla => {
+    const d = byDiploma[sigla];
+    if (!d) return '';
+    return '<div class="diploma-item">' +
+      '<div class="diploma-header" onclick="toggleDiploma(this,\'' + sigla + '\')">' +
+        '<h3><span class="badge" style="margin-right:.5rem">' + sigla + '</span> ' + escapeHtml(d.nome) + '</h3>' +
+        '<div style="display:flex;align-items:center;gap:.8rem">' +
+          '<span class="meta">' + d.artigos.length + ' artigos</span>' +
+          '<span class="toggle">&#9660;</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="diploma-body" id="db-' + sigla + '"></div>' +
+    '</div>';
+  }).join('');
+}
+
+function toggleDiploma(headerEl, sigla) {
+  const body = document.getElementById('db-' + sigla);
+  const isOpen = body.classList.contains('open');
+
+  if (isOpen) {
+    body.classList.remove('open');
+    headerEl.classList.remove('open');
+    return;
+  }
+
+  headerEl.classList.add('open');
+  body.classList.add('open');
+
+  // Lazy render articles
+  if (!body.dataset.loaded) {
+    const arts = artigos.filter(a => a.sigla === sigla);
+    body.innerHTML = arts.map((a, i) => {
+      const refHtml = a.referencias.length > 0
+        ? '<div class="ref-links" style="margin-top:.4rem">' + a.referencias.map(r =>
+            '<span class="ref-link" onclick="event.stopPropagation();searchRef(\'' + escapeHtml(r.replace(/'/g, "\\'")) + '\')">' + escapeHtml(r) + '</span>'
+          ).join('') + '</div>'
+        : '';
+      return '<div class="article-item">' +
+        '<div class="article-head" onclick="toggleArt(\'' + sigla + '-' + i + '\')">' +
+          '<span style="color:var(--gold);min-width:60px">Art. ' + a.numero + '</span>' +
+          '<span style="color:var(--text-dim);font-size:.82rem">' + getFirstLine(a.texto) + '</span>' +
+        '</div>' +
+        '<div class="article-text" id="at-' + sigla + '-' + i + '">' +
+          escapeHtml(a.texto) + refHtml +
+        '</div>' +
+      '</div>';
+    }).join('');
+    body.dataset.loaded = '1';
+  }
+}
+
+function toggleArt(id) {
+  const el = document.getElementById('at-' + id);
+  if (el) el.classList.toggle('open');
+}
+
+function getFirstLine(texto) {
+  // Get first meaningful content line (skip the Art. header)
+  const lines = texto.split('\n').filter(l => l.trim());
+  const content = lines.length > 1 ? lines[1] : lines[0] || '';
+  const clean = content.replace(/^[#*]+\s*/, '').trim();
+  return clean.length > 90 ? clean.substring(0, 90) + '...' : clean;
+}
+
+// ── INIT ──
+async function init() {
+  // Dashboard always renders (no data needed)
+  renderDashboard();
+
+  try {
+    const res = await fetch('data/artigos.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    artigos = await res.json();
+
+    if (!Array.isArray(artigos) || artigos.length === 0) {
+      throw new Error('empty');
+    }
+
+    renderStats();
+    renderNavigator();
+
+    // Wire search
+    $('#search-input').addEventListener('input', () => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(doSearch, 300);
+    });
+    $('#diploma-filter').addEventListener('change', doSearch);
+
+  } catch (e) {
+    console.error('Erro ao carregar artigos:', e);
+    // Show error only in data-dependent sections
+    const msg = '<div class="error-msg">' +
+      '<h2>Dados Indisponíveis</h2>' +
+      '<p style="color:var(--text-dim)">O arquivo <code>data/artigos.json</code> não foi encontrado ou está vazio.</p>' +
+      '<p style="color:var(--text-dim);margin-top:.5rem">Execute <code>node build.js</code> na pasta <code>site/</code> para gerar os dados.</p>' +
+    '</div>';
+    $('#search-results').innerHTML = msg;
+    $('#stats-grid').innerHTML = msg;
+    $('#diploma-list').innerHTML = msg;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
