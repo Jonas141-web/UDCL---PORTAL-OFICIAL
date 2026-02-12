@@ -6,7 +6,7 @@ export async function fetchNaoLidas(userId) {
   const { data, error } = await supabase
     .from('notificacoes')
     .select('*')
-    .eq('user_id', userId)
+    .eq('destinatario_id', userId)
     .eq('lida', false)
     .order('created_at', { ascending: false })
   if (error) { console.error('Erro notificacoes:', error); return [] }
@@ -17,7 +17,7 @@ export async function fetchTodas(userId, limite = 50) {
   const { data, error } = await supabase
     .from('notificacoes')
     .select('*')
-    .eq('user_id', userId)
+    .eq('destinatario_id', userId)
     .order('created_at', { ascending: false })
     .limit(limite)
   if (error) { console.error('Erro notificacoes:', error); return [] }

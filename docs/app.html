@@ -342,9 +342,7 @@ async function submitForm(status) {
       ementa: document.getElementById('f-ementa').value.trim(),
       conteudo,
       requer_consenso: document.getElementById('f-consenso').checked,
-      autor_id: currentUser.id,
-      autor_nome: getUserName(currentUser),
-      status
+      autor_id: currentUser.id
     })
 
     if (status === 'Publicado') {

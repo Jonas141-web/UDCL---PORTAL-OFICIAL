@@ -61,7 +61,7 @@ export async function listarRascunhos(userId) {
   return data || []
 }
 
-export async function criarPublicacao({ tipo, titulo, ementa, conteudo, requer_consenso, autor_id, autor_nome, status }) {
+export async function criarPublicacao({ tipo, titulo, ementa, conteudo, requer_consenso, autor_id }) {
   const payload = {
     tipo,
     titulo,
@@ -69,12 +69,7 @@ export async function criarPublicacao({ tipo, titulo, ementa, conteudo, requer_c
     conteudo,
     requer_consenso: requer_consenso || false,
     autor_id,
-    autor_nome,
-    status
-  }
-
-  if (status === 'Publicado') {
-    payload.published_at = new Date().toISOString()
+    status: 'Rascunho'
   }
 
   const { data, error } = await supabase
