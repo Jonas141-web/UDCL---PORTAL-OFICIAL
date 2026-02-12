@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOUZ — Diário Oficial da UDCL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1a1a2e;--bg2:#16213e;--card:#252540;--card-hover:#2e2e50;
+  --primary:#1B3A6B;--green:#2E7D32;--gold:#D4AF37;--gold-dim:rgba(212,175,55,.15);
+  --text:#f0f0f0;--text-dim:#b0b0b0;--border:#3a3a5c;--radius:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
+
+header{background:linear-gradient(135deg,var(--primary) 0%,#0f2847 100%);text-align:center;padding:2rem 1rem 1.5rem;border-bottom:3px solid var(--gold);position:relative}
+header h1{font-size:clamp(1.2rem,3.5vw,2rem);font-weight:800;letter-spacing:.08em;color:var(--gold);margin-bottom:.2rem}
+header .subtitle{font-size:.95rem;color:var(--text-dim);font-weight:600}
+
+.header-actions{position:absolute;top:1rem;right:1rem;display:flex;align-items:center;gap:.8rem}
+.header-actions a,.header-actions button{font-size:.85rem;padding:.4rem .8rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none}
+.header-actions a:hover,.header-actions button:hover{background:var(--gold-dim);color:var(--gold);border-color:var(--gold)}
+
+.bell-wrap{position:relative;cursor:pointer}
+.bell-wrap svg{width:20px;height:20px;fill:var(--text-dim);transition:fill .2s}
+.bell-wrap:hover svg{fill:var(--gold)}
+.notif-badge{position:absolute;top:-6px;right:-8px;background:#C62828;color:#fff;font-size:.65rem;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px}
+
+nav{background:var(--bg2);display:flex;justify-content:center;gap:.5rem;padding:.6rem 1rem;flex-wrap:wrap;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+nav a{color:var(--text-dim);font-size:.85rem;font-weight:600;padding:.4rem .9rem;border-radius:20px;transition:all .2s}
+nav a:hover{background:var(--gold-dim);color:var(--gold);text-decoration:none}
+
+main{max-width:900px;margin:0 auto;padding:1.5rem 1rem}
+.section-title{font-size:1.4rem;font-weight:700;color:var(--gold);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border)}
+
+.filters{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.2rem}
+.filters input,.filters select{padding:.6rem .8rem;font-size:.9rem;border:2px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);font-family:inherit;outline:none}
+.filters input{flex:1;min-width:200px}
+.filters input:focus,.filters select:focus{border-color:var(--gold)}
+
+.pub-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem;margin-bottom:.8rem;cursor:pointer;transition:border-color .2s}
+.pub-card:hover{border-color:var(--gold)}
+.pub-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;flex-wrap:wrap}
+.pub-numero{font-weight:700;color:var(--text-dim);font-size:.85rem;min-width:40px}
+.tipo-badge{display:inline-block;padding:.15rem .6rem;border-radius:4px;font-size:.75rem;font-weight:700;color:#fff}
+.pub-titulo{font-weight:700;font-size:1rem}
+.pub-meta{font-size:.82rem;color:var(--text-dim);margin-top:.2rem}
+.pub-ementa{font-size:.88rem;color:var(--text-dim);margin-top:.4rem}
+.pub-conteudo{display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:.9rem;white-space:pre-wrap;line-height:1.7}
+.pub-conteudo.open{display:block}
+
+.paginacao{display:flex;justify-content:center;align-items:center;gap:.5rem;margin-top:1.5rem}
+.paginacao button{padding:.4rem .8rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);cursor:pointer;font-family:inherit;font-size:.85rem;transition:all .2s}
+.paginacao button:hover:not(:disabled){background:var(--gold-dim);color:var(--gold);border-color:var(--gold)}
+.paginacao button:disabled{opacity:.4;cursor:default}
+.paginacao .page-info{font-size:.85rem;color:var(--text-dim)}
+
+.empty-msg{text-align:center;padding:2rem;color:var(--text-dim)}
+
+footer{text-align:center;padding:2rem 1rem;border-top:2px solid var(--border);margin-top:2rem}
+footer .date{font-size:.85rem;color:var(--text-dim)}
+
+@media(max-width:600px){
+  header{padding:1.5rem .8rem 1rem}
+  .header-actions{position:static;justify-content:center;margin-top:.8rem}
+  .filters{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-actions" id="header-actions"></div>
+  <h1>DOUZ — Diário Oficial da UDCL</h1>
+  <p class="subtitle">Registro público de todos os atos normativos</p>
+</header>
+
+<nav>
+  <a href="index.html">Portal Público</a>
+  <a href="app.html">Painel</a>
+  <a href="#publicacoes">Publicações</a>
+</nav>
+
+<main>
+<section id="publicacoes">
+  <h2 class="section-title">Publicações Oficiais</h2>
+  <div class="filters">
+    <input type="text" id="douz-busca" placeholder="Buscar por título ou ementa..." autocomplete="off">
+    <select id="douz-tipo-filter">
+      <option value="all">Todos os tipos</option>
+    </select>
+  </div>
+  <div id="douz-list"></div>
+  <div class="paginacao" id="douz-paginacao"></div>
+</section>
+</main>
+
+<footer>
+  <p class="date">UDCL &middot; Diário Oficial da União dos Ciclos Livres</p>
+</footer>
+
+<script type="module">
+import { getUser, getUserName, isLoggedIn, logout } from './js/auth.js'
+import { listarPublicacoes, TIPOS, corTipo } from './js/douz.js'
+import { iniciarPolling } from './js/notificacoes.js'
+
+let paginaAtual = 1
+const POR_PAGINA = 10
+let searchTimeout = null
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+}
+
+function formatDate(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+}
+
+async function renderHeader() {
+  const ha = document.getElementById('header-actions')
+  if (await isLoggedIn()) {
+    const user = await getUser()
+    const nome = getUserName(user)
+    ha.innerHTML =
+      '<span style="color:var(--text);font-size:.85rem">' + escapeHtml(nome) + '</span>' +
+      '<div class="bell-wrap" onclick="location.href=\'app.html#notificacoes\'">' +
+        '<svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>' +
+        '<span class="notif-badge"></span>' +
+      '</div>' +
+      '<a href="app.html">Painel</a>' +
+      '<button id="btn-logout">Sair</button>'
+    document.getElementById('btn-logout').onclick = async () => { await logout(); location.reload() }
+    iniciarPolling(user.id)
+  } else {
+    ha.innerHTML = '<a href="index.html">Portal</a>'
+  }
+}
+
+function populateTipoFilter() {
+  const sel = document.getElementById('douz-tipo-filter')
+  TIPOS.forEach(t => {
+    const opt = document.createElement('option')
+    opt.value = t
+    opt.textContent = t
+    sel.appendChild(opt)
+  })
+}
+
+async function carregarPublicacoes() {
+  const busca = document.getElementById('douz-busca').value.trim()
+  const tipo = document.getElementById('douz-tipo-filter').value
+  const container = document.getElementById('douz-list')
+  const pagDiv = document.getElementById('douz-paginacao')
+
+  container.innerHTML = '<p class="empty-msg">Carregando...</p>'
+
+  const { data, total } = await listarPublicacoes({
+    tipo: tipo !== 'all' ? tipo : null,
+    busca: busca || null,
+    pagina: paginaAtual,
+    porPagina: POR_PAGINA
+  })
+
+  if (data.length === 0) {
+    container.innerHTML = '<p class="empty-msg">Nenhuma publicação encontrada.</p>'
+    pagDiv.innerHTML = ''
+    return
+  }
+
+  container.innerHTML = data.map((pub, i) => {
+    const cor = corTipo(pub.tipo)
+    return '<div class="pub-card" onclick="this.querySelector(\'.pub-conteudo\').classList.toggle(\'open\')">' +
+      '<div class="pub-header">' +
+        '<span class="pub-numero">Nº ' + (pub.numero_sequencial || '—') + '</span>' +
+        '<span class="tipo-badge" style="background:' + cor + '">' + escapeHtml(pub.tipo) + '</span>' +
+        '<span class="pub-titulo">' + escapeHtml(pub.titulo) + '</span>' +
+      '</div>' +
+      '<div class="pub-meta">' + escapeHtml(pub.autor_nome || '') + ' &middot; ' + formatDate(pub.published_at) + '</div>' +
+      (pub.ementa ? '<div class="pub-ementa">' + escapeHtml(pub.ementa) + '</div>' : '') +
+      '<div class="pub-conteudo">' + escapeHtml(pub.conteudo || '') + '</div>' +
+    '</div>'
+  }).join('')
+
+  const totalPages = Math.ceil(total / POR_PAGINA)
+  pagDiv.innerHTML =
+    '<button id="pg-prev" ' + (paginaAtual <= 1 ? 'disabled' : '') + '>&laquo; Anterior</button>' +
+    '<span class="page-info">Página ' + paginaAtual + ' de ' + totalPages + '</span>' +
+    '<button id="pg-next" ' + (paginaAtual >= totalPages ? 'disabled' : '') + '>Próxima &raquo;</button>'
+
+  document.getElementById('pg-prev').onclick = () => { paginaAtual--; carregarPublicacoes() }
+  document.getElementById('pg-next').onclick = () => { paginaAtual++; carregarPublicacoes() }
+}
+
+async function init() {
+  await renderHeader()
+  populateTipoFilter()
+  await carregarPublicacoes()
+
+  document.getElementById('douz-busca').addEventListener('input', () => {
+    clearTimeout(searchTimeout)
+    searchTimeout = setTimeout(() => { paginaAtual = 1; carregarPublicacoes() }, 400)
+  })
+  document.getElementById('douz-tipo-filter').addEventListener('change', () => {
+    paginaAtual = 1
+    carregarPublicacoes()
+  })
+}
+
+init()
+</script>
+</body>
+</html>

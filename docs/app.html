@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UDCL — Painel do Fundador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1a1a2e;--bg2:#16213e;--card:#252540;--card-hover:#2e2e50;
+  --primary:#1B3A6B;--green:#2E7D32;--gold:#D4AF37;--gold-dim:rgba(212,175,55,.15);
+  --text:#f0f0f0;--text-dim:#b0b0b0;--border:#3a3a5c;--radius:10px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh}
+a{color:var(--gold);text-decoration:none}a:hover{text-decoration:underline}
+
+header{background:linear-gradient(135deg,var(--primary) 0%,#0f2847 100%);padding:1.5rem 1.5rem;border-bottom:3px solid var(--gold);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem}
+.header-left h1{font-size:clamp(1rem,3vw,1.5rem);font-weight:800;letter-spacing:.06em;color:var(--gold)}
+.header-left .user-info{font-size:.85rem;color:var(--text-dim);margin-top:.2rem}
+.header-right{display:flex;align-items:center;gap:.8rem}
+.header-right a,.header-right button{font-size:.85rem;padding:.4rem .8rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none}
+.header-right a:hover,.header-right button:hover{background:var(--gold-dim);color:var(--gold);border-color:var(--gold)}
+
+.bell-wrap{position:relative;cursor:pointer}
+.bell-wrap svg{width:20px;height:20px;fill:var(--text-dim);transition:fill .2s}
+.bell-wrap:hover svg{fill:var(--gold)}
+.notif-badge{position:absolute;top:-6px;right:-8px;background:#C62828;color:#fff;font-size:.65rem;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px}
+
+main{max-width:1000px;margin:0 auto;padding:1.5rem 1rem}
+section{margin-bottom:2rem}
+.section-title{font-size:1.25rem;font-weight:700;color:var(--gold);margin-bottom:1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border)}
+
+/* Dashboard cards */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.dash-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem}
+.dash-card h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);margin-bottom:.3rem}
+.dash-card .value{font-size:1.3rem;font-weight:700}
+.dash-card .value.gold{color:var(--gold)}
+.dash-card .value.green{color:var(--green)}
+.progress-wrap{background:#1a1a30;border-radius:6px;height:12px;overflow:hidden;margin-top:.4rem}
+.progress-bar{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--primary),var(--gold));transition:width .6s ease}
+
+/* Action cards */
+.actions-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.8rem}
+.action-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center;cursor:pointer;transition:all .2s}
+.action-card:hover{border-color:var(--gold);background:var(--card-hover)}
+.action-card .icon{font-size:1.5rem;margin-bottom:.4rem}
+.action-card .label{font-size:.9rem;font-weight:600}
+
+/* Pub list */
+.pub-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.pub-item .tipo-badge{display:inline-block;padding:.12rem .5rem;border-radius:4px;font-size:.72rem;font-weight:700;color:#fff}
+.pub-item .titulo{font-weight:600;font-size:.9rem;flex:1}
+.pub-item .data{font-size:.8rem;color:var(--text-dim)}
+
+/* Notif list */
+.notif-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:.5rem;cursor:pointer;transition:border-color .2s}
+.notif-item:hover{border-color:var(--gold)}
+.notif-item.nao-lida{border-color:var(--gold);border-width:2px}
+.notif-item .notif-titulo{font-weight:600;font-size:.9rem}
+.notif-item .notif-msg{font-size:.85rem;color:var(--text-dim);margin-top:.2rem}
+.notif-item .notif-data{font-size:.78rem;color:var(--text-dim);margin-top:.3rem}
+
+/* Form */
+.form-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;display:none}
+.form-section.open{display:block}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.3rem;color:var(--text-dim)}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:.6rem .8rem;font-size:.9rem;border:2px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);font-family:inherit;outline:none}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold)}
+.form-group textarea{min-height:180px;resize:vertical;line-height:1.6}
+.checkbox-group{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+.checkbox-group input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold)}
+.checkbox-group label{font-size:.88rem;color:var(--text-dim);margin:0}
+.form-actions{display:flex;gap:.8rem;flex-wrap:wrap}
+.btn{padding:.6rem 1.2rem;border:none;border-radius:var(--radius);font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--gold);color:var(--bg)}
+.btn-primary:hover{background:#c9a430}
+.btn-secondary{background:var(--card-hover);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+
+.success-msg{background:rgba(46,125,50,.15);border:1px solid var(--green);border-radius:var(--radius);padding:1rem;margin-bottom:1rem;color:var(--green);font-weight:600;display:none}
+
+.link-ver{font-size:.85rem;color:var(--gold);margin-top:.5rem;display:inline-block}
+.empty-msg{color:var(--text-dim);font-size:.9rem;padding:.5rem 0}
+
+footer{text-align:center;padding:1.5rem 1rem;border-top:2px solid var(--border);margin-top:2rem}
+footer .date{font-size:.85rem;color:var(--text-dim)}
+
+@media(max-width:600px){
+  header{flex-direction:column;text-align:center}
+  .header-right{justify-content:center}
+  .dash-grid{grid-template-columns:1fr}
+  .actions-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>UDCL &mdash; Painel do Fundador</h1>
+    <div class="user-info" id="user-info">Carregando...</div>
+  </div>
+  <div class="header-right">
+    <div class="bell-wrap" id="bell-wrap" onclick="scrollToNotif()">
+      <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      <span class="notif-badge"></span>
+    </div>
+    <a href="index.html">Portal Público</a>
+    <a href="douz.html">DOUZ</a>
+    <button id="btn-logout">Sair</button>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══ RESUMO DO CICLO ═══ -->
+<section id="ciclo">
+  <h2 class="section-title">Resumo do Ciclo</h2>
+  <div class="dash-grid">
+    <div class="dash-card"><h3>Ciclo Atual</h3><div class="value gold" id="dc-ciclo">—</div><div style="font-size:.82rem;color:var(--text-dim);margin-top:.15rem" id="dc-ano">—</div></div>
+    <div class="dash-card"><h3>Presidente da República</h3><div class="value" id="dc-presidente">—</div></div>
+    <div class="dash-card"><h3>Presidente do Congresso</h3><div class="value" id="dc-congresso">—</div></div>
+    <div class="dash-card"><h3>Dias Restantes</h3><div class="value green" id="dc-dias">—</div><div class="progress-wrap"><div class="progress-bar" id="dc-progress" style="width:0%"></div></div><div style="font-size:.78rem;color:var(--text-dim);margin-top:.3rem" id="dc-transicao">—</div></div>
+  </div>
+</section>
+
+<!-- ═══ AÇÕES RÁPIDAS ═══ -->
+<section id="acoes">
+  <h2 class="section-title">Ações Rápidas</h2>
+  <div class="actions-grid">
+    <div class="action-card" onclick="abrirForm('Decreto')"><div class="icon">📜</div><div class="label">Novo Decreto</div></div>
+    <div class="action-card" onclick="abrirForm('Lei Ordinária')"><div class="icon">⚖️</div><div class="label">Nova Lei</div></div>
+    <div class="action-card" onclick="abrirForm('Comunicado')"><div class="icon">📢</div><div class="label">Novo Comunicado</div></div>
+    <div class="action-card" onclick="abrirForm('Marco Histórico')"><div class="icon">🏛️</div><div class="label">Marco Histórico</div></div>
+    <div class="action-card" onclick="location.href='douz.html'"><div class="icon">📰</div><div class="label">Abrir DOUZ</div></div>
+  </div>
+</section>
+
+<!-- ═══ ÚLTIMAS PUBLICAÇÕES ═══ -->
+<section id="ultimas">
+  <h2 class="section-title">Últimas Publicações do DOUZ</h2>
+  <div id="ultimas-list"><p class="empty-msg">Carregando...</p></div>
+  <a href="douz.html" class="link-ver">Ver todas &rarr;</a>
+</section>
+
+<!-- ═══ NOTIFICAÇÕES ═══ -->
+<section id="notificacoes">
+  <h2 class="section-title">Notificações Recentes</h2>
+  <div id="notif-list"><p class="empty-msg">Carregando...</p></div>
+  <a href="#" class="link-ver" id="ver-todas-notif" style="display:none">Ver todas &rarr;</a>
+</section>
+
+<!-- ═══ FORMULÁRIO ═══ -->
+<section id="formulario">
+  <h2 class="section-title">Nova Publicação</h2>
+  <div class="success-msg" id="form-success"></div>
+  <div class="form-section open" id="pub-form">
+    <div class="form-group">
+      <label for="f-tipo">Tipo</label>
+      <select id="f-tipo"></select>
+    </div>
+    <div class="form-group">
+      <label for="f-titulo">Título</label>
+      <input type="text" id="f-titulo" placeholder="Título da publicação">
+    </div>
+    <div class="form-group">
+      <label for="f-ementa">Ementa</label>
+      <input type="text" id="f-ementa" placeholder="Resumo curto">
+    </div>
+    <div class="form-group">
+      <label for="f-conteudo">Conteúdo</label>
+      <textarea id="f-conteudo" placeholder="Texto completo da publicação..."></textarea>
+    </div>
+    <div class="checkbox-group">
+      <input type="checkbox" id="f-consenso">
+      <label for="f-consenso">Requer consenso do outro Fundador</label>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-secondary" id="btn-rascunho">Salvar Rascunho</button>
+      <button class="btn btn-primary" id="btn-publicar">Publicar no DOUZ</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p class="date">UDCL &middot; Painel Administrativo</p>
+</footer>
+
+<script type="module">
+import { requireAuth, getUserName, logout } from './js/auth.js'
+import { listarUltimas, criarPublicacao, publicarNoDouz, TIPOS, corTipo } from './js/douz.js'
+import { fetchTodas, marcarComoLida, iniciarPolling } from './js/notificacoes.js'
+
+let currentUser = null
+
+function escapeHtml(s) {
+  if (!s) return ''
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+}
+
+function formatDate(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })
+}
+
+/* ── Cycle calc (same as index.html) ── */
+function calcCycle() {
+  const now = new Date()
+  const baseYear = 2026, baseMonth = 2, baseDay = 2
+  const cycleStart = new Date(baseYear, baseMonth, baseDay)
+  if (now < cycleStart) {
+    const daysLeft = Math.ceil((cycleStart - now) / 864e5)
+    return { name:'Pré-Ciclo 1', detail:'Fundação e Consolidação', presidente:'João Victor Martins Andrade', congresso:'Pedro Gabriel', daysRemaining:daysLeft, progress:0, nextTransition:cycleStart }
+  }
+  let cycleNum = 0, cStart, cEnd
+  const d = new Date(baseYear, baseMonth, baseDay)
+  while (true) {
+    cStart = new Date(d)
+    d.setMonth(d.getMonth() + 2)
+    cEnd = new Date(d.getFullYear(), d.getMonth(), 1)
+    const cEndNext = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+    cycleNum++
+    if (now <= cEnd || now < cEndNext) break
+  }
+  const totalDays = Math.ceil((cEnd - cStart) / 864e5) + 1
+  const elapsed = Math.ceil((now - cStart) / 864e5)
+  const remaining = Math.max(0, totalDays - elapsed)
+  const progress = Math.min(100, (elapsed / totalDays) * 100)
+  const anoLudico = Math.floor((cycleNum - 1) / 6) + 1
+  const cycleInYear = ((cycleNum - 1) % 6) + 1
+  const isOdd = cycleNum % 2 === 1
+  return { name:'Ciclo ' + cycleInYear, detail:anoLudico + 'º Ano Lúdico', presidente:isOdd ? 'João Victor Martins Andrade' : 'Pedro Gabriel', congresso:isOdd ? 'Pedro Gabriel' : 'João Victor Martins Andrade', daysRemaining:remaining, progress, nextTransition:cEnd }
+}
+
+function renderDashboard() {
+  const c = calcCycle()
+  document.getElementById('dc-ciclo').textContent = c.name
+  document.getElementById('dc-ano').textContent = c.detail
+  document.getElementById('dc-presidente').textContent = c.presidente
+  document.getElementById('dc-congresso').textContent = c.congresso
+  document.getElementById('dc-dias').textContent = c.daysRemaining + ' dias'
+  document.getElementById('dc-progress').style.width = c.progress + '%'
+  const opts = { day:'2-digit', month:'long', year:'numeric' }
+  document.getElementById('dc-transicao').textContent = 'Próxima transição: ' + c.nextTransition.toLocaleDateString('pt-BR', opts)
+}
+
+/* ── Últimas Publicações ── */
+async function renderUltimas() {
+  const list = document.getElementById('ultimas-list')
+  const pubs = await listarUltimas(5)
+  if (pubs.length === 0) { list.innerHTML = '<p class="empty-msg">Nenhuma publicação ainda.</p>'; return }
+  list.innerHTML = pubs.map(p =>
+    '<div class="pub-item">' +
+      '<span class="tipo-badge" style="background:' + corTipo(p.tipo) + '">' + escapeHtml(p.tipo) + '</span>' +
+      '<span class="titulo">' + escapeHtml(p.titulo) + '</span>' +
+      '<span class="data">' + formatDate(p.published_at) + '</span>' +
+    '</div>'
+  ).join('')
+}
+
+/* ── Notificações ── */
+let allNotifs = []
+let showingAll = false
+
+async function renderNotifs() {
+  const list = document.getElementById('notif-list')
+  allNotifs = await fetchTodas(currentUser.id, 50)
+  if (allNotifs.length === 0) {
+    list.innerHTML = '<p class="empty-msg">Nenhuma notificação.</p>'
+    document.getElementById('ver-todas-notif').style.display = 'none'
+    return
+  }
+  const shown = showingAll ? allNotifs : allNotifs.slice(0, 5)
+  list.innerHTML = shown.map(n =>
+    '<div class="notif-item' + (n.lida ? '' : ' nao-lida') + '" data-id="' + n.id + '" onclick="window._marcarLida(\'' + n.id + '\', this)">' +
+      '<div class="notif-titulo">' + escapeHtml(n.titulo) + '</div>' +
+      '<div class="notif-msg">' + escapeHtml(n.mensagem || '') + '</div>' +
+      '<div class="notif-data">' + formatDate(n.created_at) + '</div>' +
+    '</div>'
+  ).join('')
+  if (allNotifs.length > 5 && !showingAll) {
+    document.getElementById('ver-todas-notif').style.display = 'inline-block'
+  } else {
+    document.getElementById('ver-todas-notif').style.display = 'none'
+  }
+}
+
+window._marcarLida = async function(id, el) {
+  if (el.classList.contains('nao-lida')) {
+    await marcarComoLida(id)
+    el.classList.remove('nao-lida')
+  }
+}
+
+/* ── Form ── */
+function populateTipos() {
+  const sel = document.getElementById('f-tipo')
+  TIPOS.forEach(t => {
+    const opt = document.createElement('option')
+    opt.value = t
+    opt.textContent = t
+    sel.appendChild(opt)
+  })
+}
+
+window.abrirForm = function(tipo) {
+  document.getElementById('f-tipo').value = tipo
+  document.getElementById('formulario').scrollIntoView({ behavior:'smooth' })
+}
+
+function limparForm() {
+  document.getElementById('f-titulo').value = ''
+  document.getElementById('f-ementa').value = ''
+  document.getElementById('f-conteudo').value = ''
+  document.getElementById('f-consenso').checked = false
+}
+
+function showSuccess(msg) {
+  const el = document.getElementById('form-success')
+  el.textContent = msg
+  el.style.display = 'block'
+  setTimeout(() => { el.style.display = 'none' }, 6000)
+}
+
+async function submitForm(status) {
+  const titulo = document.getElementById('f-titulo').value.trim()
+  const conteudo = document.getElementById('f-conteudo').value.trim()
+  if (!titulo) { alert('Informe o título.'); return }
+  if (!conteudo && status === 'Publicado') { alert('Informe o conteúdo.'); return }
+
+  try {
+    const pub = await criarPublicacao({
+      tipo: document.getElementById('f-tipo').value,
+      titulo,
+      ementa: document.getElementById('f-ementa').value.trim(),
+      conteudo,
+      requer_consenso: document.getElementById('f-consenso').checked,
+      autor_id: currentUser.id,
+      autor_nome: getUserName(currentUser),
+      status
+    })
+
+    if (status === 'Publicado') {
+      await publicarNoDouz(pub.id)
+      showSuccess('Publicado no DOUZ com sucesso! Nº ' + (pub.numero_sequencial || '—'))
+      await renderUltimas()
+    } else {
+      showSuccess('Rascunho salvo com sucesso!')
+    }
+    limparForm()
+  } catch (e) {
+    alert('Erro: ' + e.message)
+  }
+}
+
+window.scrollToNotif = function() {
+  document.getElementById('notificacoes').scrollIntoView({ behavior:'smooth' })
+}
+
+/* ── Init ── */
+async function init() {
+  currentUser = await requireAuth()
+  if (!currentUser) return
+
+  const nome = getUserName(currentUser)
+  document.getElementById('user-info').textContent = nome
+
+  document.getElementById('btn-logout').onclick = async () => { await logout(); window.location.href = 'index.html' }
+
+  renderDashboard()
+  populateTipos()
+  await renderUltimas()
+  await renderNotifs()
+  iniciarPolling(currentUser.id)
+
+  document.getElementById('btn-rascunho').onclick = () => submitForm('Rascunho')
+  document.getElementById('btn-publicar').onclick = () => submitForm('Publicado')
+  document.getElementById('ver-todas-notif').onclick = (e) => { e.preventDefault(); showingAll = true; renderNotifs() }
+}
+
+init()
+</script>
+</body>
+</html>
