@@ -332,6 +332,33 @@ footer blockquote{
   font-size:.9rem;
 }
 
+/* ── AUTH HEADER ── */
+.auth-area{position:absolute;top:1rem;right:1rem;display:flex;align-items:center;gap:.7rem}
+header{position:relative}
+.auth-area button,.auth-area a{font-size:.85rem;padding:.4rem .8rem;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-family:inherit;transition:all .2s;text-decoration:none}
+.auth-area button:hover,.auth-area a:hover{background:var(--gold-dim);color:var(--gold);border-color:var(--gold)}
+.bell-wrap{position:relative;cursor:pointer}
+.bell-wrap svg{width:20px;height:20px;fill:var(--text-dim);transition:fill .2s}
+.bell-wrap:hover svg{fill:var(--gold)}
+.notif-badge{position:absolute;top:-6px;right:-8px;background:#C62828;color:#fff;font-size:.65rem;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:none;align-items:center;justify-content:center;padding:0 4px}
+
+/* ── LOGIN MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:1000;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg2);border:2px solid var(--gold);border-radius:var(--radius);padding:2rem;width:90%;max-width:400px;position:relative}
+.modal h2{color:var(--gold);font-size:1.2rem;margin-bottom:1.2rem;text-align:center}
+.modal .close-btn{position:absolute;top:.8rem;right:1rem;font-size:1.3rem;color:var(--text-dim);cursor:pointer;background:none;border:none;font-family:inherit}
+.modal .close-btn:hover{color:var(--gold)}
+.modal .form-group{margin-bottom:1rem}
+.modal .form-group label{display:block;font-size:.85rem;font-weight:600;margin-bottom:.3rem;color:var(--text-dim)}
+.modal .form-group input{width:100%;padding:.6rem .8rem;font-size:.95rem;border:2px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);font-family:inherit;outline:none}
+.modal .form-group input:focus{border-color:var(--gold)}
+.modal .btn-submit{width:100%;padding:.7rem;font-size:1rem;font-weight:700;border:none;border-radius:var(--radius);background:var(--gold);color:var(--bg);cursor:pointer;font-family:inherit;transition:background .2s}
+.modal .btn-submit:hover{background:#c9a430}
+.modal .toggle-link{display:block;text-align:center;margin-top:1rem;font-size:.88rem;color:var(--gold);cursor:pointer}
+.modal .toggle-link:hover{text-decoration:underline}
+.modal .form-error{color:#ef5350;font-size:.85rem;margin-bottom:.8rem;display:none}
+
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
   header{padding:2rem .8rem 1.5rem}
@@ -344,16 +371,43 @@ footer blockquote{
 <body>
 
 <header>
+  <div class="auth-area" id="auth-area"></div>
   <h1>UNIÃO DEMOCRÁTICA DOS CICLOS LIVRES</h1>
   <p class="subtitle">Estado Fraterno de Soberania Lúdica</p>
   <p class="motto">AMICITIA VINCIT OMNIA</p>
 </header>
+
+<!-- Modal Login/Registro -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="close-btn" id="modal-close">&times;</button>
+    <h2 id="modal-title">Entrar</h2>
+    <div class="form-error" id="modal-error"></div>
+    <div id="modal-fields">
+      <div class="form-group" id="fg-nome" style="display:none">
+        <label for="m-nome">Nome</label>
+        <input type="text" id="m-nome" placeholder="Seu nome completo">
+      </div>
+      <div class="form-group">
+        <label for="m-email">E-mail</label>
+        <input type="email" id="m-email" placeholder="seu@email.com">
+      </div>
+      <div class="form-group">
+        <label for="m-senha">Senha</label>
+        <input type="password" id="m-senha" placeholder="Sua senha">
+      </div>
+    </div>
+    <button class="btn-submit" id="modal-submit">Entrar</button>
+    <span class="toggle-link" id="modal-toggle">Criar conta</span>
+  </div>
+</div>
 
 <nav>
   <a href="#dashboard">Dashboard</a>
   <a href="#busca">Busca</a>
   <a href="#estatisticas">Estatísticas</a>
   <a href="#navegador">Diplomas</a>
+  <a href="douz.html">DOUZ</a>
 </nav>
 
 <main id="main-content">
@@ -434,10 +488,13 @@ footer blockquote{
   </blockquote>
 </footer>
 
-<script>
+<script type="module">
 /* ══════════════════════════════════════════════
    UDCL PORTAL — JavaScript
    ══════════════════════════════════════════════ */
+
+import { login, registro, logout, getUser, getUserName, isLoggedIn } from './js/auth.js'
+import { iniciarPolling } from './js/notificacoes.js'
 
 let artigos = [];
 
@@ -772,7 +829,101 @@ async function init() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// ── 5. AUTH UI ──
+let isRegistro = false;
+
+function escapeHtmlAuth(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function renderAuthArea() {
+  const area = $('#auth-area');
+  if (await isLoggedIn()) {
+    const user = await getUser();
+    const nome = getUserName(user);
+    area.innerHTML =
+      '<span style="color:var(--text);font-size:.85rem">' + escapeHtmlAuth(nome) + '</span>' +
+      '<div class="bell-wrap" onclick="location.href=\'app.html#notificacoes\'">' +
+        '<svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5S10.5 3.17 10.5 4v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>' +
+        '<span class="notif-badge"></span>' +
+      '</div>' +
+      '<a href="app.html">Painel</a>' +
+      '<button id="btn-logout-main">Sair</button>';
+    document.getElementById('btn-logout-main').onclick = async () => { await logout(); location.reload(); };
+    iniciarPolling(user.id);
+  } else {
+    area.innerHTML = '<button id="btn-entrar">Entrar</button>';
+    document.getElementById('btn-entrar').onclick = () => openModal();
+  }
+}
+
+function openModal() {
+  isRegistro = false;
+  updateModalMode();
+  $('#modal-overlay').classList.add('open');
+  $('#m-email').focus();
+}
+
+function closeModal() {
+  $('#modal-overlay').classList.remove('open');
+  $('#modal-error').style.display = 'none';
+  $('#m-email').value = '';
+  $('#m-senha').value = '';
+  $('#m-nome').value = '';
+}
+
+function updateModalMode() {
+  $('#modal-title').textContent = isRegistro ? 'Criar Conta' : 'Entrar';
+  $('#fg-nome').style.display = isRegistro ? 'block' : 'none';
+  $('#modal-submit').textContent = isRegistro ? 'Criar Conta' : 'Entrar';
+  $('#modal-toggle').textContent = isRegistro ? 'Já tenho conta' : 'Criar conta';
+  $('#modal-error').style.display = 'none';
+}
+
+function showModalError(msg) {
+  const el = $('#modal-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+async function handleSubmit() {
+  const email = $('#m-email').value.trim();
+  const senha = $('#m-senha').value;
+  if (!email || !senha) { showModalError('Preencha e-mail e senha.'); return; }
+
+  try {
+    if (isRegistro) {
+      const nome = $('#m-nome').value.trim();
+      if (!nome) { showModalError('Informe seu nome.'); return; }
+      await registro(email, senha, nome);
+      // After registration, user may need email confirmation — try auto-login
+      try { await login(email, senha); } catch (_) {}
+    } else {
+      await login(email, senha);
+    }
+    closeModal();
+    window.location.href = 'app.html';
+  } catch (e) {
+    showModalError(e.message || 'Erro ao autenticar.');
+  }
+}
+
+// Wire modal events
+$('#modal-close').onclick = closeModal;
+$('#modal-overlay').onclick = (e) => { if (e.target === $('#modal-overlay')) closeModal(); };
+$('#modal-toggle').onclick = () => { isRegistro = !isRegistro; updateModalMode(); };
+$('#modal-submit').onclick = handleSubmit;
+$('#m-senha').addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSubmit(); });
+
+// Expose functions used in onclick attributes
+window.toggleResult = toggleResult;
+window.searchRef = searchRef;
+window.toggleDiploma = toggleDiploma;
+window.toggleArt = toggleArt;
+
+// Module scripts are deferred; DOM is ready
+renderAuthArea();
+init();
 </script>
 </body>
 </html>
