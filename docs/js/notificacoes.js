@@ -1,4 +1,4 @@
-import { supabase } from './supabase-config.js'
+import { supabase } from './supabase-config.js?v=20250212'
 
 let pollingInterval = null
 

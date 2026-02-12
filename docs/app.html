@@ -1,3 +1,4 @@
+<!-- v2025-02-12-fix -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -194,9 +195,9 @@ footer .date{font-size:.85rem;color:var(--text-dim)}
 </footer>
 
 <script type="module">
-import { requireAuth, getUserName, logout } from './js/auth.js'
-import { listarUltimas, criarPublicacao, publicarNoDouz, TIPOS, corTipo } from './js/douz.js'
-import { fetchTodas, marcarComoLida, iniciarPolling } from './js/notificacoes.js'
+import { requireAuth, getUserName, logout } from './js/auth.js?v=20250212'
+import { listarUltimas, criarPublicacao, publicarNoDouz, TIPOS, corTipo } from './js/douz.js?v=20250212'
+import { fetchTodas, marcarComoLida, iniciarPolling } from './js/notificacoes.js?v=20250212'
 
 let currentUser = null
 
