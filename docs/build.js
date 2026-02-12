@@ -99,7 +99,7 @@ function build() {
     const filename = path.basename(filePath, '.md');
     const info = SIGLAS[filename];
     if (!info) {
-      console.log(`⚠  Arquivo ignorado (sem mapeamento de sigla): ${filename}.md`);
+      console.log(`[AVISO] Arquivo ignorado (sem mapeamento de sigla): ${filename}.md`);
       continue;
     }
 
@@ -109,7 +109,7 @@ function build() {
     totalRefs += refs;
 
     allArticles.push(...articles);
-    console.log(`✓ ${info.sigla.padEnd(5)} — ${String(articles.length).padStart(3)} artigos, ${String(refs).padStart(3)} referências  (${info.nome})`);
+    console.log(`[OK] ${info.sigla.padEnd(5)} -- ${String(articles.length).padStart(3)} artigos, ${String(refs).padStart(3)} referencias  (${info.nome})`);
   }
 
   const outputFile = path.join(outputDir, 'artigos.json');

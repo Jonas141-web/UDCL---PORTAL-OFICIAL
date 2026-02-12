@@ -23,7 +23,7 @@ export const CORES_TIPO = {
 
 export async function listarPublicacoes({ tipo, busca, pagina = 1, porPagina = 10 } = {}) {
   let query = supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .select('*', { count: 'exact' })
     .eq('status', 'Publicado')
     .order('published_at', { ascending: false })
@@ -41,7 +41,7 @@ export async function listarPublicacoes({ tipo, busca, pagina = 1, porPagina = 1
 
 export async function listarUltimas(limite = 5) {
   const { data, error } = await supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .select('*')
     .eq('status', 'Publicado')
     .order('published_at', { ascending: false })
@@ -52,7 +52,7 @@ export async function listarUltimas(limite = 5) {
 
 export async function listarRascunhos(userId) {
   const { data, error } = await supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .select('*')
     .eq('autor_id', userId)
     .eq('status', 'Rascunho')
@@ -78,7 +78,7 @@ export async function criarPublicacao({ tipo, titulo, ementa, conteudo, requer_c
   }
 
   const { data, error } = await supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .insert(payload)
     .select()
     .single()
