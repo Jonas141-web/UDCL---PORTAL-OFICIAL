@@ -1,4 +1,4 @@
-import { supabase } from './supabase-config.js'
+import { supabase } from './supabase-config.js?v=20250212'
 
 export const TIPOS = [
   'Decreto', 'Lei Ordinária', 'Lei Complementar', 'Emenda Constitucional',
@@ -23,7 +23,7 @@ export const CORES_TIPO = {
 
 export async function listarPublicacoes({ tipo, busca, pagina = 1, porPagina = 10 } = {}) {
   let query = supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .select('*', { count: 'exact' })
     .eq('status', 'Publicado')
     .order('published_at', { ascending: false })
@@ -41,7 +41,7 @@ export async function listarPublicacoes({ tipo, busca, pagina = 1, porPagina = 1
 
 export async function listarUltimas(limite = 5) {
   const { data, error } = await supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .select('*')
     .eq('status', 'Publicado')
     .order('published_at', { ascending: false })
@@ -52,7 +52,7 @@ export async function listarUltimas(limite = 5) {
 
 export async function listarRascunhos(userId) {
   const { data, error } = await supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .select('*')
     .eq('autor_id', userId)
     .eq('status', 'Rascunho')
@@ -61,7 +61,7 @@ export async function listarRascunhos(userId) {
   return data || []
 }
 
-export async function criarPublicacao({ tipo, titulo, ementa, conteudo, requer_consenso, autor_id, autor_nome, status }) {
+export async function criarPublicacao({ tipo, titulo, ementa, conteudo, requer_consenso, autor_id }) {
   const payload = {
     tipo,
     titulo,
@@ -69,16 +69,11 @@ export async function criarPublicacao({ tipo, titulo, ementa, conteudo, requer_c
     conteudo,
     requer_consenso: requer_consenso || false,
     autor_id,
-    autor_nome,
-    status
-  }
-
-  if (status === 'Publicado') {
-    payload.published_at = new Date().toISOString()
+    status: 'Rascunho'
   }
 
   const { data, error } = await supabase
-    .from('publicacoes')
+    .from('douz_publicacoes')
     .insert(payload)
     .select()
     .single()

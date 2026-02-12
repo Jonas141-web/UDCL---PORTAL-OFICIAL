@@ -1,3 +1,4 @@
+<!-- v2025-02-12-fix -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -105,9 +106,9 @@ footer .date{font-size:.85rem;color:var(--text-dim)}
 </footer>
 
 <script type="module">
-import { getUser, getUserName, isLoggedIn, logout } from './js/auth.js'
-import { listarPublicacoes, TIPOS, corTipo } from './js/douz.js'
-import { iniciarPolling } from './js/notificacoes.js'
+import { getUser, getUserName, isLoggedIn, logout } from './js/auth.js?v=20250212'
+import { listarPublicacoes, TIPOS, corTipo } from './js/douz.js?v=20250212'
+import { iniciarPolling } from './js/notificacoes.js?v=20250212'
 
 let paginaAtual = 1
 const POR_PAGINA = 10
